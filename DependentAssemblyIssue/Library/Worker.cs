@@ -8,7 +8,7 @@ namespace Library
         public static void Do()
         {
             Debug.WriteLine($"{nameof(Worker)}.{nameof(Do)}() called.");
-            var obj = JObject.Parse(@"{""myKey"": ""myValue""}");
+            var obj = JObject.Parse(@"{""myKey"": ""myValue""}", null);
             Debug.WriteLine($"data parsed, myKey = {obj["myKey"]}");
         }
     }
