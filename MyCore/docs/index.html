@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script type="text/javascript">
+       var getPosition = function(){
+          var el = document.getElementById('getPosition');
+          document.getElementById('position').innerText = 'start: ' + el.selectionStart + 'end: ' + el.selectionEnd;
+       };
+      
+       var setPosition = function(){
+        var log = '';
+        var elem = document.getElementById('getPosition');
+        var position = document.getElementById('setPosition').value;
+
+        if(elem != null) {
+            if(elem.createTextRange) {
+                log += 'a ';
+                var range = elem.createTextRange();
+                range.move('character', position);
+                range.select();
+            }
+            else {
+                if(elem.selectionEnd != undefined) {
+                    log += 'b ';
+                    elem.focus();
+                    log += 'd ';
+                    elem.setSelectionRange(position, position);
+                    log += 'e ';
+                }
+                else {
+                    log += 'c ';
+                    elem.focus();
+                    log += 'f ';
+                    //elem.selectionStart = position;
+                    //elem.selectionEnd = position;
+                }
+            }
+        }
+        document.getElementById('log').innerText = log;
+       };
+    </script>
+  </head>
+  <body>
+    getPosition test: <input id="getPosition" type="text" onchange="getPosition()" />
+    </br>
+    now position: <div id="position"></div>
+    </br>
+    setPosition test: <input id="setPosition" type="text" /> <input type="button" value="click me" onclick="setPosition()" />
+    </br>
+    log: <div id="log"></div>
+  </body>
+</html>
