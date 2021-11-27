@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace Library
 {
@@ -7,6 +8,8 @@ namespace Library
         public static void Do()
         {
             Debug.WriteLine($"{nameof(Worker)}.{nameof(Do)}() called.");
+            var obj = JObject.Parse(@"{""myKey"": ""myValue""}");
+            Debug.WriteLine($"data parsed, myKey = {obj["myKey"]}");
         }
     }
 }
