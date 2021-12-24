@@ -12,15 +12,18 @@ namespace MultipleImplementation.Controllers
         private IEnumerable<IFoo> _allFoo;
         private IReadOnlyDictionary<string, IBar> _allBar;
         private IBazBridge _bazBridge;
+        private IProvider<IQux> _quxProvider;
 
         public DemoController(
             IEnumerable<IFoo> allFoo,
             IReadOnlyDictionary<string, IBar> allBar,
-            IBazBridge bazBridge)
+            IBazBridge bazBridge,
+            IProvider<IQux> quxProvider)
         {
             _allFoo = allFoo;
             _allBar = allBar;
             _bazBridge = bazBridge;
+            _quxProvider = quxProvider;
         }
 
         [HttpGet]
@@ -43,6 +46,9 @@ namespace MultipleImplementation.Controllers
 
             // baz
             sb.Append(_bazBridge.Hey(name));
+
+            // qux
+            sb.Append(_quxProvider.Get(name).Yo());
 
             return Ok(sb.ToString());
         }
@@ -161,6 +167,59 @@ internal class BazBridge : IBazBridge
     {
         _allBazDictionary.TryGetValue(name, out IBaz baz);
         return baz?.Hey();
+    }
+}
+
+#endregion
+
+#region About Qux
+
+
+public interface IQux : INameable
+{
+    string Yo();
+}
+
+internal class Qux1 : IQux
+{
+    public string Name => "Qux1";
+
+    public string Yo()
+    {
+        return "Yo, this is Qux1";
+    }
+}
+
+internal class Qux2 : IQux
+{
+    public string Name => "Qux2";
+
+    public string Yo()
+    {
+        return "Yo, this is Qux2";
+    }
+}
+
+public interface IProvider<T>
+    where T : INameable
+{
+    T Get(string name);
+}
+
+public class Provider<T> : IProvider<T>
+    where T : INameable
+{
+    private IReadOnlyDictionary<string, T> _dictionary;
+
+    public Provider(IEnumerable<T> nameable)
+    {
+        _dictionary = nameable.ToDictionary(n => n.Name, n => n);
+    }
+
+    public T Get(string name)
+    {
+        _dictionary.TryGetValue(name, out T imp);
+        return imp;
     }
 }
 

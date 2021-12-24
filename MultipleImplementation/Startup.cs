@@ -36,6 +36,10 @@ namespace MultipleImplementation
             services.AddScoped<IBaz, Baz1>();
             services.AddScoped<IBaz, Baz2>();
             services.AddScoped<IBazBridge, BazBridge>();
+
+            services.AddScoped<IQux, Qux1>();
+            services.AddScoped<IQux, Qux2>();
+            services.AddScoped<IProvider<IQux>, Provider<IQux>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
